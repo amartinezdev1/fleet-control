@@ -1,0 +1,535 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<title>PITLANE — Fleet Care · Lavado y mantenimiento de flotas en Panamá</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@100..125,300..700&amp;display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box}
+html,body{margin:0;padding:0;background:#F1F1EE;color:#111214;-webkit-font-smoothing:antialiased}
+body{font-family:Archivo,system-ui,sans-serif;font-size:1rem;line-height:1.55;font-stretch:100%}
+a{color:inherit;text-decoration:none;transition:color 400ms cubic-bezier(0.22,1,0.36,1)}
+a:hover{color:#13804A}
+img{display:block}
+button{font-family:inherit}
+:focus-visible{outline:2px solid #13804A !important;outline-offset:3px;border-radius:8px}
+::selection{background:#111214;color:#fff}
+@keyframes pulse{0%{transform:scale(1);opacity:.55}100%{transform:scale(3.2);opacity:0}}
+@media (prefers-reduced-motion: reduce){*,*::before,*::after{transition:none !important;animation:none !important}}
+</style>
+</helmet>
+
+<div style="position:relative; min-height:100vh; background:#F1F1EE; overflow-x:clip; padding:10px; display:flex; flex-direction:column; gap:10px;">
+
+  <!-- Floating nav (after hero) -->
+  <header style="position:fixed; top:14px; left:50%; z-index:60; transform:translate(-50%, {{ floatY }}); opacity:{{ floatO }}; pointer-events:{{ floatPE }}; transition:transform 700ms cubic-bezier(0.22,1,0.36,1), opacity 500ms cubic-bezier(0.22,1,0.36,1); width:min(calc(100% - 28px), 720px);">
+    <nav aria-label="Principal flotante" style="display:flex; align-items:center; justify-content:space-between; gap:16px; height:56px; padding:0 8px 0 20px; border-radius:999px; background:rgba(255,255,255,0.86); backdrop-filter:blur(16px) saturate(1.3); -webkit-backdrop-filter:blur(16px) saturate(1.3); box-shadow:0 1px 0 rgba(17,18,20,0.06), 0 12px 32px -12px rgba(17,18,20,0.18);">
+      <a href="#top" aria-label="PITLANE, inicio" style="font-weight:700; font-stretch:112%; font-size:1.0625rem; letter-spacing:-0.03em;">[EMPRESA]</a>
+      <div style="display:{{ navLinksDisplay }}; gap:2px; font-size:0.875rem;">
+        <a href="#servicios" style="padding:10px 12px;">Servicios</a>
+        <a href="#proceso" style="padding:10px 12px;">Proceso</a>
+        <a href="#modalidades" style="padding:10px 12px;">Modalidades</a>
+        <a href="#faq" style="padding:10px 12px;">FAQ</a>
+      </div>
+      <a href="#contacto" data-hov="" style="display:inline-flex; align-items:center; gap:8px; height:42px; padding:0 18px; border-radius:999px; background:#111214; color:#FFFFFF; font-size:0.875rem; font-weight:500;" style-hover="background:#2A2C30; color:#FFFFFF;">Cotizar <span data-hov-arrow="" style="display:inline-block; transition:transform 500ms cubic-bezier(0.22,1,0.36,1);">→</span></a>
+    </nav>
+  </header>
+
+  <sc-if value="{{ menuOpen }}" hint-placeholder-val="{{ false }}">
+    <div role="dialog" aria-modal="true" aria-label="Menú" style="position:fixed; inset:0; z-index:80; background:#FFFFFF; display:flex; flex-direction:column; padding:18px 24px 28px;">
+      <div style="display:flex; justify-content:space-between; align-items:center; height:52px;">
+        <span style="font-weight:700; font-stretch:112%; font-size:1.25rem; letter-spacing:-0.03em;">PITLANE</span>
+        <button type="button" onClick="{{ closeMenu }}" aria-label="Cerrar menú" style="width:44px; height:44px; border:1px solid #E2E2DE; border-radius:999px; background:#FFFFFF; color:#111214; font-size:1.25rem; cursor:pointer;">×</button>
+      </div>
+      <div style="display:flex; flex-direction:column; gap:6px; margin-top:auto;">
+        <a href="#servicios" onClick="{{ closeMenu }}" style="font-weight:600; font-stretch:112%; font-size:2.75rem; letter-spacing:-0.04em; line-height:1.1;">Servicios</a>
+        <a href="#proceso" onClick="{{ closeMenu }}" style="font-weight:600; font-stretch:112%; font-size:2.75rem; letter-spacing:-0.04em; line-height:1.1;">Proceso</a>
+        <a href="#modalidades" onClick="{{ closeMenu }}" style="font-weight:600; font-stretch:112%; font-size:2.75rem; letter-spacing:-0.04em; line-height:1.1;">Modalidades</a>
+        <a href="#faq" onClick="{{ closeMenu }}" style="font-weight:600; font-stretch:112%; font-size:2.75rem; letter-spacing:-0.04em; line-height:1.1;">FAQ</a>
+      </div>
+      <a href="#contacto" onClick="{{ closeMenu }}" style="margin-top:32px; display:flex; align-items:center; justify-content:center; height:56px; border-radius:999px; background:#111214; color:#FFFFFF; font-weight:500;">Cotizar flota →</a>
+    </div>
+  </sc-if>
+
+  <!-- HERO -->
+  <section id="top" data-screen-label="01 Hero" style="position:relative; height:calc(100svh - 20px); min-height:620px; border-radius:20px; background:#FFFFFF; overflow:hidden; isolation:isolate; display:flex; flex-direction:column;">
+    <nav aria-label="Principal" style="position:relative; z-index:3; display:grid; grid-template-columns:1fr auto 1fr; align-items:center; height:76px; padding:0 clamp(16px, 2.4vw, 32px);">
+      <div style="display:{{ navLinksDisplay }}; gap:2px; font-size:0.875rem;">
+        <a href="#servicios" style="padding:12px;">Servicios</a>
+        <a href="#proceso" style="padding:12px;">Proceso</a>
+        <a href="#modalidades" style="padding:12px;">Modalidades</a>
+      </div>
+      <a href="#top" aria-label="PITLANE, inicio" style="grid-column:2; display:flex; flex-direction:column; align-items:center; gap:2px; line-height:1;">
+        <span style="font-weight:700; font-stretch:115%; font-size:1.125rem; letter-spacing:-0.03em;">[EMPRESA]</span>
+        
+      </a>
+      <div style="grid-column:3; justify-self:end; display:flex; align-items:center; gap:6px;">
+        <a href="#faq" style="display:{{ navLinksDisplay }}; padding:12px; font-size:0.875rem;">FAQ</a>
+        <a href="#contacto" data-hov="" style="display:{{ navCtaDisplay }}; align-items:center; gap:8px; height:40px; padding:0 18px; border-radius:999px; background:#111214; color:#FFFFFF; font-size:0.875rem; font-weight:500;" style-hover="background:#2A2C30; color:#FFFFFF;">Cotizar flota <span data-hov-arrow="" style="display:inline-block; transition:transform 500ms cubic-bezier(0.22,1,0.36,1);">→</span></a>
+        <button type="button" onClick="{{ openMenu }}" aria-label="Abrir menú" aria-expanded="{{ menuExpanded }}" style="display:{{ burgerDisplay }}; align-items:center; justify-content:center; flex-direction:column; gap:5px; width:44px; height:44px; border:1px solid #E2E2DE; border-radius:999px; background:#FFFFFF; color:#111214; cursor:pointer; padding:0;">
+          <span style="display:block; width:16px; height:1.5px; background:currentColor;"></span>
+          <span style="display:block; width:16px; height:1.5px; background:currentColor;"></span>
+        </button>
+      </div>
+    </nav>
+
+    <div style="position:relative; z-index:2; display:flex; flex-direction:column; align-items:center; text-align:center; gap:18px; padding:clamp(28px, 7vh, 72px) 20px 0;">
+      <h1 style="margin:0; font-weight:600; font-stretch:112%; font-size:{{ h1Size }}; letter-spacing:-0.045em; line-height:0.98; text-wrap:balance;">
+        <span data-line="" style="display:block;">Tu flota limpia,</span>
+        <span data-line="" data-delay="90" style="display:block;">siempre en ruta.</span>
+      </h1>
+      <p data-line="" data-delay="200" style="margin: 0; max-width: 50ch; font-size: 1rem; color: #3A3D42; text-wrap: balance">Lavado y mantenimiento preventivo en tu patio, fuera de horario operativo. Ninguna unidad sale de ruta para quedar limpia.</p>
+      <div data-line="" data-delay="300" style="display:flex; gap:8px; flex-wrap:wrap; justify-content:center; margin-top:4px;">
+        <a href="#contacto" data-hov="" style="display:inline-flex; align-items:center; gap:8px; height:46px; padding:0 22px; border-radius:999px; background:#111214; color:#FFFFFF; font-size:0.9375rem; font-weight:500;" style-hover="background:#2A2C30; color:#FFFFFF;">Cotizar flota <span data-hov-arrow="" style="display:inline-block; transition:transform 500ms cubic-bezier(0.22,1,0.36,1);">→</span></a>
+        <a href="#proceso" data-hov="" style="display:inline-flex; align-items:center; gap:8px; height:46px; padding:0 22px; border-radius:999px; background:#F1F1EE; color:#111214; font-size:0.9375rem; font-weight:500;" style-hover="background:#E6E6E2; color:#111214;">Ver el proceso</a>
+      </div>
+    </div>
+
+    <div style="position:relative; flex:1 1 0; min-height:40%; margin-top:clamp(16px, 3vh, 32px); overflow:hidden;"><div ref="{{ heroMediaRef }}" style="position:absolute; inset:0; z-index:1; -webkit-mask-image:linear-gradient(to bottom, transparent 0%, #000 20%); mask-image:linear-gradient(to bottom, transparent 0%, #000 20%); will-change:transform;">
+      <img src="assets/hero-fallback.png" alt="Van y camión blancos de flota sobre asfalto mojado al atardecer, con luz rasante sobre la carrocería" style="position:absolute; inset:0; width:100%; height:100%; object-fit:cover; object-position:{{ heroPos }};">
+        <sc-if value="{{ hasVideo }}" hint-placeholder-val="{{ false }}"><video ref="{{ videoRef }}" muted="" playsinline="" preload="auto" aria-hidden="true" style="position:absolute; inset:0; width:100%; height:100%; object-fit:cover; object-position:{{ heroPos }}; opacity:0; transition:opacity 900ms cubic-bezier(0.22,1,0.36,1);"></video></sc-if>
+    </div></div>
+  </section>
+
+  <!-- PÁRRAFO CON FRASES ACTIVAS -->
+  <section data-card="" data-screen-label="02 Manifiesto" style="position:relative; z-index:3; border-radius:20px; background:#FFFFFF; padding:clamp(96px, 18vh, 200px) clamp(20px, 5vw, 48px); transform-origin:center top;">
+    <p ref="{{ edRef }}" style="margin:0 auto; max-width:30ch; font-weight:400; font-stretch:106%; font-size:clamp(1.375rem, 2.3vw, 2rem); line-height:1.38; letter-spacing:-0.02em;">
+      <span data-ed="">Lavamos tu flota con </span><span style="position:relative;"><span role="button" tabindex="0" onMouseEnter="{{ ph0on }}" onMouseLeave="{{ phOff }}" onFocus="{{ ph0on }}" onBlur="{{ phOff }}" onClick="{{ ph0on }}" data-ed="" style="text-decoration:underline; text-decoration-thickness:1px; text-underline-offset:0.16em; border-radius:6px; padding:0 3px; margin:0 -3px; cursor:pointer; background:{{ phBg0 }}; color:{{ phInk0 }}; transition:background 300ms, color 300ms;">agua tratada</span><span aria-hidden="{{ phHid0 }}" style="position:absolute; z-index:5; left:-3px; top:calc(100% + 8px); width:min(340px, 80vw); padding:10px 10px 14px; border-radius:14px; background:#FFFFFF; box-shadow:0 20px 48px -16px rgba(17,18,20,0.32), 0 0 0 1px rgba(17,18,20,0.06); display:flex; flex-direction:column; gap:10px; font-size:0.8125rem; line-height:1.4; letter-spacing:0; font-stretch:100%; opacity:{{ phO0 }}; transform:{{ phT0 }}; pointer-events:none; transition:opacity 350ms cubic-bezier(0.22,1,0.36,1), transform 450ms cubic-bezier(0.22,1,0.36,1);"><img src="assets/servicios-03.jpeg" alt="" style="width:100%; height:210px; object-fit:cover; border-radius:10px;"><span style="padding:0 4px; color:#3A3D42;">Recirculamos hasta 80% del agua. Químicos biodegradables, sin residuos en tu patio.</span><span style="padding:0 4px; font-size:0.875rem; font-weight:500; letter-spacing:-0.01em;">≈ 38 L / van</span></span></span><span data-ed=""> directamente en el </span><span style="position:relative;"><span role="button" tabindex="0" onMouseEnter="{{ ph1on }}" onMouseLeave="{{ phOff }}" onFocus="{{ ph1on }}" onBlur="{{ phOff }}" onClick="{{ ph1on }}" data-ed="" style="text-decoration:underline; text-decoration-thickness:1px; text-underline-offset:0.16em; border-radius:6px; padding:0 3px; margin:0 -3px; cursor:pointer; background:{{ phBg1 }}; color:{{ phInk1 }}; transition:background 300ms, color 300ms;">patio del cliente</span><span aria-hidden="{{ phHid1 }}" style="position:absolute; z-index:5; left:-3px; top:calc(100% + 8px); width:min(340px, 80vw); padding:10px 10px 14px; border-radius:14px; background:#FFFFFF; box-shadow:0 20px 48px -16px rgba(17,18,20,0.32), 0 0 0 1px rgba(17,18,20,0.06); display:flex; flex-direction:column; gap:10px; font-size:0.8125rem; line-height:1.4; letter-spacing:0; font-stretch:100%; opacity:{{ phO1 }}; transform:{{ phT1 }}; pointer-events:none; transition:opacity 350ms cubic-bezier(0.22,1,0.36,1), transform 450ms cubic-bezier(0.22,1,0.36,1);"><img src="assets/servicios-05.jpeg" alt="" style="width:100%; height:210px; object-fit:cover; border-radius:10px;"><span style="padding:0 4px; color:#3A3D42;">Cuadrilla móvil con tanque, generador e hidrolavadora propios. Solo necesitamos acceso.</span><span style="padding:0 4px; font-size:0.875rem; font-weight:500; letter-spacing:-0.01em;">6 cuadrillas activas</span></span></span><span data-ed="">, fuera del </span><span style="position:relative;"><span role="button" tabindex="0" onMouseEnter="{{ ph2on }}" onMouseLeave="{{ phOff }}" onFocus="{{ ph2on }}" onBlur="{{ phOff }}" onClick="{{ ph2on }}" data-ed="" style="text-decoration:underline; text-decoration-thickness:1px; text-underline-offset:0.16em; border-radius:6px; padding:0 3px; margin:0 -3px; cursor:pointer; background:{{ phBg2 }}; color:{{ phInk2 }}; transition:background 300ms, color 300ms;">horario operativo</span><span aria-hidden="{{ phHid2 }}" style="position:absolute; z-index:5; left:-3px; top:calc(100% + 8px); width:min(340px, 80vw); padding:10px 10px 14px; border-radius:14px; background:#FFFFFF; box-shadow:0 20px 48px -16px rgba(17,18,20,0.32), 0 0 0 1px rgba(17,18,20,0.06); display:flex; flex-direction:column; gap:10px; font-size:0.8125rem; line-height:1.4; letter-spacing:0; font-stretch:100%; opacity:{{ phO2 }}; transform:{{ phT2 }}; pointer-events:none; transition:opacity 350ms cubic-bezier(0.22,1,0.36,1), transform 450ms cubic-bezier(0.22,1,0.36,1);"><img src="assets/servicios-01.jpeg" alt="" style="width:100%; height:210px; object-fit:cover; border-radius:10px;"><span style="padding:0 4px; color:#3A3D42;">Turnos nocturnos y de madrugada, cuando tus unidades ya están en patio.</span><span style="padding:0 4px; font-size:0.875rem; font-weight:500; letter-spacing:-0.01em;">Ventana 20:00—05:00</span></span></span><span data-ed="">. Cada unidad pasa un </span><span style="position:relative;"><span role="button" tabindex="0" onMouseEnter="{{ ph3on }}" onMouseLeave="{{ phOff }}" onFocus="{{ ph3on }}" onBlur="{{ phOff }}" onClick="{{ ph3on }}" data-ed="" style="text-decoration:underline; text-decoration-thickness:1px; text-underline-offset:0.16em; border-radius:6px; padding:0 3px; margin:0 -3px; cursor:pointer; background:{{ phBg3 }}; color:{{ phInk3 }}; transition:background 300ms, color 300ms;">checklist mecánico</span><span aria-hidden="{{ phHid3 }}" style="position:absolute; z-index:5; left:-3px; top:calc(100% + 8px); width:min(340px, 80vw); padding:10px 10px 14px; border-radius:14px; background:#FFFFFF; box-shadow:0 20px 48px -16px rgba(17,18,20,0.32), 0 0 0 1px rgba(17,18,20,0.06); display:flex; flex-direction:column; gap:10px; font-size:0.8125rem; line-height:1.4; letter-spacing:0; font-stretch:100%; opacity:{{ phO3 }}; transform:{{ phT3 }}; pointer-events:none; transition:opacity 350ms cubic-bezier(0.22,1,0.36,1), transform 450ms cubic-bezier(0.22,1,0.36,1);"><img src="assets/servicios-04.jpeg" alt="" style="width:100%; height:210px; object-fit:cover; border-radius:10px;"><span style="padding:0 4px; color:#3A3D42;">Fluidos, llantas, luces, plumillas y fugas visibles. Hallazgos reportados al instante.</span><span style="padding:0 4px; font-size:0.875rem; font-weight:500; letter-spacing:-0.01em;">12 puntos / unidad</span></span></span><span data-ed=""> y queda registrada en un </span><span style="position:relative;"><span role="button" tabindex="0" onMouseEnter="{{ ph4on }}" onMouseLeave="{{ phOff }}" onFocus="{{ ph4on }}" onBlur="{{ phOff }}" onClick="{{ ph4on }}" data-ed="" style="text-decoration:underline; text-decoration-thickness:1px; text-underline-offset:0.16em; border-radius:6px; padding:0 3px; margin:0 -3px; cursor:pointer; background:{{ phBg4 }}; color:{{ phInk4 }}; transition:background 300ms, color 300ms;">reporte por placa</span><span aria-hidden="{{ phHid4 }}" style="position:absolute; z-index:5; left:-3px; top:calc(100% + 8px); width:min(340px, 80vw); padding:10px 10px 14px; border-radius:14px; background:#FFFFFF; box-shadow:0 20px 48px -16px rgba(17,18,20,0.32), 0 0 0 1px rgba(17,18,20,0.06); display:flex; flex-direction:column; gap:10px; font-size:0.8125rem; line-height:1.4; letter-spacing:0; font-stretch:100%; opacity:{{ phO4 }}; transform:{{ phT4 }}; pointer-events:none; transition:opacity 350ms cubic-bezier(0.22,1,0.36,1), transform 450ms cubic-bezier(0.22,1,0.36,1);"><img src="assets/servicios-02.jpeg" alt="" style="width:100%; height:210px; object-fit:cover; border-radius:10px;"><span style="padding:0 4px; color:#3A3D42;">Fotos antes y después, hallazgos y consumo de agua. Mensual, en PDF y CSV.</span><span style="padding:0 4px; font-size:0.875rem; font-weight:500; letter-spacing:-0.01em;">Entrega día 01</span></span></span><span data-ed="">. Ves el estado de tu flota sin llamar a nadie.</span>
+    </p>
+  </section>
+
+  <!-- DATOS -->
+  <section data-screen-label="03 Datos" style="padding:clamp(80px, 14vh, 140px) clamp(12px, 3vw, 40px);">
+    <div style="display:flex; flex-direction:column; align-items:center; text-align:center; gap:12px;">
+      <h2 data-line="" style="margin:0; font-weight:600; font-stretch:112%; font-size:clamp(2rem, 4vw, 3.25rem); letter-spacing:-0.045em; line-height:1;">Útil para tu operación.</h2>
+      <p data-line="" data-delay="80" style="margin:0; max-width:40ch; color:#3A3D42;">Tres números que medimos cada turno, en cada patio.</p>
+    </div>
+    <div style="margin:clamp(40px, 6vh, 64px) auto 0; max-width:1040px; display:grid; grid-template-columns:repeat(auto-fit, minmax(min(100%, 260px), 1fr)); gap:12px;">
+      <div data-spread="-1" style="display:flex; flex-direction:column; gap:28px; padding:22px; border-radius:16px; background:#FFFFFF; box-shadow:0 1px 2px rgba(17,18,20,0.04), 0 16px 40px -24px rgba(17,18,20,0.2);">
+        <div style="font-size:0.875rem; font-weight:500; letter-spacing:-0.01em; color:#5E6168;">Unidades / día</div>
+        <div style="display:flex; flex-direction:column; gap:6px;">
+          <div style="font-weight:600; font-stretch:112%; font-size:clamp(3rem, 5vw, 4.25rem); letter-spacing:-0.05em; line-height:0.95;"><span data-count="340">340</span></div>
+          <div style="font-weight:500;">capacidad diaria</div>
+        </div>
+        <p style="margin:0; font-size:0.875rem; color:#5E6168; text-wrap:pretty;">Seis cuadrillas móviles operando en paralelo.</p>
+      </div>
+      <div data-spread="0" style="display:flex; flex-direction:column; gap:28px; padding:22px; border-radius:16px; background:#FFFFFF; box-shadow:0 1px 2px rgba(17,18,20,0.04), 0 16px 40px -24px rgba(17,18,20,0.2);">
+        <div style="font-size:0.875rem; font-weight:500; letter-spacing:-0.01em; color:#5E6168;">Tiempo de ciclo</div>
+        <div style="display:flex; flex-direction:column; gap:6px;">
+          <div style="font-weight:600; font-stretch:112%; font-size:clamp(3rem, 5vw, 4.25rem); letter-spacing:-0.05em; line-height:0.95;"><span data-count="18">18</span><span style="font-size:0.45em; letter-spacing:-0.02em;"> min</span></div>
+          <div style="font-weight:500;">por van, bahía a bahía</div>
+        </div>
+        <p style="margin:0; font-size:0.875rem; color:#5E6168; text-wrap:pretty;">Desde que entra a la bahía hasta que se libera.</p>
+      </div>
+      <div data-spread="1" style="display:flex; flex-direction:column; gap:28px; padding:22px; border-radius:16px; background:#FFFFFF; box-shadow:0 1px 2px rgba(17,18,20,0.04), 0 16px 40px -24px rgba(17,18,20,0.2);">
+        <div style="font-size:0.875rem; font-weight:500; letter-spacing:-0.01em; color:#5E6168;">Cobertura</div>
+        <div style="display:flex; flex-direction:column; gap:6px;">
+          <div style="font-weight:600; font-stretch:112%; font-size:clamp(3rem, 5vw, 4.25rem); letter-spacing:-0.05em; line-height:0.95;"><span data-count="3">3</span><span style="font-size:0.45em; letter-spacing:-0.02em;"> provincias</span></div>
+          <div style="font-weight:500;">base en Juan Díaz</div>
+        </div>
+        <p style="margin:0; font-size:0.875rem; color:#5E6168; text-wrap:pretty;">Panamá, Panamá Oeste y Colón.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- SERVICIOS -->
+  <section id="servicios" data-card="" data-screen-label="04 Servicios" style="border-radius:20px; background:#FFFFFF; padding:clamp(72px, 12vh, 120px) 0; transform-origin:center top;">
+    <div style="display:flex; flex-direction:column; align-items:center; text-align:center; gap:12px; padding:0 20px;">
+      <div data-line="" style="font-size:0.875rem; font-weight:500; letter-spacing:-0.01em; color:#5E6168;">Servicios — 05 tipos de unidad</div>
+      <h2 data-line="" data-delay="60" style="margin:0; font-weight:600; font-stretch:112%; font-size:clamp(2rem, 4vw, 3.25rem); letter-spacing:-0.045em; line-height:1;">Cada unidad, su protocolo.</h2>
+    </div>
+    <div ref="{{ trackRef }}" role="region" aria-label="Carrusel de tipos de unidad" tabindex="0" style="margin-top:clamp(40px, 6vh, 64px); display:flex; gap:12px; overflow-x:auto; scroll-snap-type:x mandatory; scroll-padding-inline:clamp(20px, 4vw, 48px); padding:0 clamp(20px, 4vw, 48px); scrollbar-width:none; cursor:grab; user-select:none; -webkit-user-select:none; overscroll-behavior-x:contain;">
+      <article data-hov="" style="flex:0 0 auto; width:min(80vw, 400px); scroll-snap-align:start; display:flex; flex-direction:column; gap:16px; padding:10px 10px 20px; border-radius:20px; background:#F6F6F3;">
+        <div style="width:100%; aspect-ratio:928 / 1152; max-height:62vh; border-radius:12px; overflow:hidden; background:#E9E9E5;"><img data-hov-img="" draggable="false" src="assets/servicios-01.jpeg" alt="Van de carga blanca vista de tres cuartos trasero, carrocería recién lavada dentro de una bahía de servicio" style="width:100%; height:100%; object-fit:cover; object-position:60% 50%; transition:transform 800ms cubic-bezier(0.22,1,0.36,1);"></div>
+        <div style="display:flex; flex-direction:column; gap:6px; padding:0 10px;">
+          <div style="font-size:0.875rem; font-weight:500; letter-spacing:-0.01em; color:#5E6168;">01 — Van · 18 min</div>
+          <h3 style="margin:0; font-weight:600; font-stretch:108%; font-size:1.5rem; letter-spacing:-0.035em; line-height:1.1;">Vans de carga y reparto</h3>
+          <p style="margin:0; font-size:0.875rem; color:#3A3D42; text-wrap:pretty;">Exterior, cabina y compartimento de carga en un solo ciclo.</p>
+        </div>
+      </article>
+      <article data-hov="" style="flex:0 0 auto; width:min(80vw, 400px); scroll-snap-align:start; display:flex; flex-direction:column; gap:16px; padding:10px 10px 20px; border-radius:20px; background:#F6F6F3;">
+        <div style="width:100%; aspect-ratio:928 / 1152; max-height:62vh; border-radius:12px; overflow:hidden; background:#E9E9E5;"><img data-hov-img="" draggable="false" src="assets/servicios-02.jpeg" alt="Bus coaster color crema estacionado sobre piso de concreto pulido en un taller" style="width:100%; height:100%; object-fit:cover; transition:transform 800ms cubic-bezier(0.22,1,0.36,1);"></div>
+        <div style="display:flex; flex-direction:column; gap:6px; padding:0 10px;">
+          <div style="font-size:0.875rem; font-weight:500; letter-spacing:-0.01em; color:#5E6168;">02 — Bus · 32 min</div>
+          <h3 style="margin:0; font-weight:600; font-stretch:108%; font-size:1.5rem; letter-spacing:-0.035em; line-height:1.1;">Buses y coasters</h3>
+          <p style="margin:0; font-size:0.875rem; color:#3A3D42; text-wrap:pretty;">Cabina de pasajeros desinfectada, vidrios y carrocería.</p>
+        </div>
+      </article>
+      <article data-hov="" style="flex:0 0 auto; width:min(80vw, 400px); scroll-snap-align:start; display:flex; flex-direction:column; gap:16px; padding:10px 10px 20px; border-radius:20px; background:#F6F6F3;">
+        <div style="width:100%; aspect-ratio:928 / 1152; max-height:62vh; border-radius:12px; overflow:hidden; background:#E9E9E5;"><img data-hov-img="" draggable="false" src="assets/servicios-03.jpeg" alt="Sedán ejecutivo gris oscuro con gotas de agua sobre la carrocería, visto desde atrás en un taller" style="width:100%; height:100%; object-fit:cover; transition:transform 800ms cubic-bezier(0.22,1,0.36,1);"></div>
+        <div style="display:flex; flex-direction:column; gap:6px; padding:0 10px;">
+          <div style="font-size:0.875rem; font-weight:500; letter-spacing:-0.01em; color:#5E6168;">03 — Sedán · 25 min</div>
+          <h3 style="margin:0; font-weight:600; font-stretch:108%; font-size:1.5rem; letter-spacing:-0.035em; line-height:1.1;">Sedanes ejecutivos</h3>
+          <p style="margin:0; font-size:0.875rem; color:#3A3D42; text-wrap:pretty;">Lavado a mano y detallado interior para flota gerencial.</p>
+        </div>
+      </article>
+      <article data-hov="" style="flex:0 0 auto; width:min(80vw, 400px); scroll-snap-align:start; display:flex; flex-direction:column; gap:16px; padding:10px 10px 20px; border-radius:20px; background:#F6F6F3;">
+        <div style="width:100%; aspect-ratio:928 / 1152; max-height:62vh; border-radius:12px; overflow:hidden; background:#E9E9E5;"><img data-hov-img="" draggable="false" src="assets/servicios-04.jpeg" alt="Camión de caja seca blanco estacionado en una nave industrial con piso húmedo" style="width:100%; height:100%; object-fit:cover; transition:transform 800ms cubic-bezier(0.22,1,0.36,1);"></div>
+        <div style="display:flex; flex-direction:column; gap:6px; padding:0 10px;">
+          <div style="font-size:0.875rem; font-weight:500; letter-spacing:-0.01em; color:#5E6168;">04 — Camión · 40 min</div>
+          <h3 style="margin:0; font-weight:600; font-stretch:108%; font-size:1.5rem; letter-spacing:-0.035em; line-height:1.1;">Camiones de caja</h3>
+          <p style="margin:0; font-size:0.875rem; color:#3A3D42; text-wrap:pretty;">Caja, chasis y cabina. Desengrase de bajos incluido.</p>
+        </div>
+      </article>
+      <article data-hov="" style="flex:0 0 auto; width:min(80vw, 400px); scroll-snap-align:start; display:flex; flex-direction:column; gap:16px; padding:10px 10px 20px; border-radius:20px; background:#F6F6F3;">
+        <div style="width:100%; aspect-ratio:928 / 1152; max-height:62vh; border-radius:12px; overflow:hidden; background:#E9E9E5;"><img data-hov-img="" draggable="false" src="assets/servicios-05.jpeg" alt="Fila de tres vans blancas estacionadas en paralelo dentro de una bahía de mantenimiento" style="width:100%; height:100%; object-fit:cover; transition:transform 800ms cubic-bezier(0.22,1,0.36,1);"></div>
+        <div style="display:flex; flex-direction:column; gap:6px; padding:0 10px;">
+          <div style="font-size:0.875rem; font-weight:500; letter-spacing:-0.01em; color:#5E6168;">05 — Flota mixta</div>
+          <h3 style="margin:0; font-weight:600; font-stretch:108%; font-size:1.5rem; letter-spacing:-0.035em; line-height:1.1;">Flota mixta completa</h3>
+          <p style="margin:0; font-size:0.875rem; color:#3A3D42; text-wrap:pretty;">Un calendario para todas tus unidades y un reporte por placa.</p>
+        </div>
+      </article>
+    </div>
+    <div style="margin-top:28px; display:flex; justify-content:center; align-items:center; gap:8px;">
+      <button type="button" onClick="{{ prevCard }}" aria-label="Unidad anterior" style="width:44px; height:44px; border-radius:999px; border:0; background:#F1F1EE; color:#111214; font-size:1rem; cursor:pointer; transition:background 400ms;" style-hover="background:#E4E4E0;">←</button>
+      <div style="width:120px; height:2px; border-radius:2px; background:#E4E4E0; overflow:hidden;"><div ref="{{ progRef }}" style="height:100%; background:#111214; transform-origin:left center; transform:scaleX(0.3); transition:transform 400ms cubic-bezier(0.22,1,0.36,1);"></div></div>
+      <button type="button" onClick="{{ nextCard }}" aria-label="Unidad siguiente" style="width:44px; height:44px; border-radius:999px; border:0; background:#111214; color:#FFFFFF; font-size:1rem; cursor:pointer; transition:background 400ms;" style-hover="background:#2A2C30;">→</button>
+    </div>
+  </section>
+
+  <!-- PROCESO (oscuro) -->
+  <section id="proceso" data-screen-label="05 Proceso" style="border-radius:20px; background:#111214; color:#FFFFFF;">
+    <div style="max-width:1280px; margin:0 auto; padding:clamp(88px, 14vh, 150px) clamp(20px, 4vw, 48px); display:grid; grid-template-columns:{{ procCols }}; gap:clamp(40px, 6vw, 96px);">
+      <div>
+        <div style="position:{{ procSticky }}; top:100px; display:flex; flex-direction:column; gap:18px;">
+          <div data-line="" style="font-size:0.875rem; font-weight:500; letter-spacing:-0.01em; color:#A9ADB4;">Proceso — 04 pasos</div>
+          <h2 data-line="" data-delay="60" style="margin:0; font-weight:600; font-stretch:112%; font-size:clamp(2.25rem, 4.6vw, 4rem); letter-spacing:-0.045em; line-height:0.98; text-wrap:balance;">Cuatro pasos. Ninguna unidad fuera de ruta.</h2>
+          <p data-line="" data-delay="120" style="margin:0; max-width:36ch; color:#C9CCD1;">Del inventario inicial al reporte mensual, cada vehículo queda registrado por placa.</p>
+          <div style="margin-top:12px; display:flex; gap:6px;">
+            <span style="width:28px; height:3px; border-radius:2px; background:{{ dot0 }}; transition:background 500ms;"></span>
+            <span style="width:28px; height:3px; border-radius:2px; background:{{ dot1 }}; transition:background 500ms;"></span>
+            <span style="width:28px; height:3px; border-radius:2px; background:{{ dot2 }}; transition:background 500ms;"></span>
+            <span style="width:28px; height:3px; border-radius:2px; background:{{ dot3 }}; transition:background 500ms;"></span>
+          </div>
+        </div>
+      </div>
+      <ol style="list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:12px;">
+        <li data-step="0" style="min-height:{{ stepMinH }}; padding:24px; border-radius:16px; background:{{ stepBg0 }}; opacity:{{ stepO0 }}; display:flex; flex-direction:column; gap:14px; transition:background 600ms, opacity 600ms;">
+          <div style="display:flex; justify-content:space-between; font-size:0.875rem; font-weight:500; letter-spacing:-0.01em; color:#A9ADB4;"><span>Paso 01</span><span>Entrega 48 h</span></div>
+          <h3 style="margin:auto 0 0; font-weight:600; font-stretch:110%; font-size:clamp(1.5rem, 2.6vw, 2.25rem); letter-spacing:-0.04em; line-height:1;">Diagnóstico de flota</h3>
+          <p style="margin:0; max-width:44ch; color:#C9CCD1;">Inventariamos unidades, tipo y estado de carrocería. Definimos frecuencia por vehículo según uso y ruta.</p>
+        </li>
+        <li data-step="1" style="min-height:{{ stepMinH }}; padding:24px; border-radius:16px; background:{{ stepBg1 }}; opacity:{{ stepO1 }}; display:flex; flex-direction:column; gap:14px; transition:background 600ms, opacity 600ms;">
+          <div style="display:flex; justify-content:space-between; font-size:0.875rem; font-weight:500; letter-spacing:-0.01em; color:#A9ADB4;"><span>Paso 02</span><span>20:00—05:00</span></div>
+          <h3 style="margin:auto 0 0; font-weight:600; font-stretch:110%; font-size:clamp(1.5rem, 2.6vw, 2.25rem); letter-spacing:-0.04em; line-height:1;">Programación</h3>
+          <p style="margin:0; max-width:44ch; color:#C9CCD1;">Turnos en tu patio fuera del horario operativo: nocturno, madrugada o fin de semana. Calendario compartido.</p>
+        </li>
+        <li data-step="2" style="min-height:{{ stepMinH }}; padding:24px; border-radius:16px; background:{{ stepBg2 }}; opacity:{{ stepO2 }}; display:flex; flex-direction:column; gap:14px; transition:background 600ms, opacity 600ms;">
+          <div style="display:flex; justify-content:space-between; font-size:0.875rem; font-weight:500; letter-spacing:-0.01em; color:#A9ADB4;"><span>Paso 03</span><span>18 min / van</span></div>
+          <h3 style="margin:auto 0 0; font-weight:600; font-stretch:110%; font-size:clamp(1.5rem, 2.6vw, 2.25rem); letter-spacing:-0.04em; line-height:1;">Ejecución</h3>
+          <p style="margin:0; max-width:44ch; color:#C9CCD1;">Cuadrilla móvil con agua tratada, generador e hidrolavadora propios. Checklist mecánico por unidad.</p>
+        </li>
+        <li data-step="3" style="min-height:{{ stepMinH }}; padding:24px; border-radius:16px; background:{{ stepBg3 }}; opacity:{{ stepO3 }}; display:flex; flex-direction:column; gap:14px; transition:background 600ms, opacity 600ms;">
+          <div style="display:flex; justify-content:space-between; font-size:0.875rem; font-weight:500; letter-spacing:-0.01em; color:#A9ADB4;"><span>Paso 04</span><span>PDF + CSV</span></div>
+          <h3 style="margin:auto 0 0; font-weight:600; font-stretch:110%; font-size:clamp(1.5rem, 2.6vw, 2.25rem); letter-spacing:-0.04em; line-height:1;">Reporte</h3>
+          <p style="margin:0; max-width:44ch; color:#C9CCD1;">Fotos antes y después, hallazgos mecánicos y consumo de agua, agrupados por placa y por mes.</p>
+        </li>
+      </ol>
+    </div>
+  </section>
+
+  <!-- RESULTADOS -->
+  <section data-screen-label="06 Resultados" style="padding:clamp(80px, 14vh, 140px) clamp(12px, 3vw, 40px);">
+    <div style="display:flex; flex-direction:column; align-items:center; text-align:center; gap:12px;">
+      <h2 data-line="" style="margin:0; font-weight:600; font-stretch:112%; font-size:clamp(2rem, 4vw, 3.25rem); letter-spacing:-0.045em; line-height:1; text-wrap:balance;">Resultados que hablan solos.</h2>
+      <p data-line="" data-delay="80" style="margin:0; color:#3A3D42;">Así cambia una flota cuando el lavado deja de sacarla de ruta.</p>
+    </div>
+    <figure ref="{{ chartRef }}" data-line="" data-delay="140" style="margin:clamp(40px, 6vh, 64px) auto 0; max-width:880px; padding:clamp(22px, 3.5vw, 40px); border-radius:20px; background:#FFFFFF; box-shadow:0 1px 2px rgba(17,18,20,0.04), 0 24px 60px -32px rgba(17,18,20,0.25); display:flex; flex-direction:column; gap:24px;">
+      <blockquote style="margin:0; max-width:34ch; font-weight:500; font-stretch:104%; font-size:clamp(1.25rem, 2.2vw, 1.75rem); line-height:1.3; letter-spacing:-0.025em; text-wrap:pretty;">Desde que <span style="color:#13804A;">[EMPRESA]</span> lava en nuestro patio, ninguna van sale de ruta. En seis meses <span style="padding:0 4px; margin:0 -2px; border-radius:6px; background:{{ hlBg }}; color:{{ hlInk }}; transition:background 600ms 900ms, color 600ms 900ms;">bajamos el costo por unidad 22%</span>.</blockquote>
+      <figcaption style="display:flex; align-items:center; gap:12px;">
+        <span aria-hidden="true" style="width:36px; height:36px; border-radius:999px; background:#E8F4EC; color:#13804A; display:flex; align-items:center; justify-content:center; font-weight:600; font-size:0.8125rem;">MR</span>
+        <span style="display:flex; flex-direction:column; line-height:1.3;"><span style="font-weight:500; font-size:0.9375rem;">Gerente de Operaciones</span><span style="font-size:0.8125rem; color:#5E6168;">Distribuidora de consumo masivo · 62 unidades</span></span>
+      </figcaption>
+      <div style="position:relative;">
+        <svg viewBox="0 0 800 200" preserveAspectRatio="none" role="img" aria-label="Costo por unidad, de 100 en abril a 78 en septiembre" style="display:block; width:100%; height:clamp(140px, 22vw, 200px); overflow:visible;">
+          <line x1="0" y1="20" x2="800" y2="20" stroke="#E4E4E0" stroke-width="1" vector-effect="non-scaling-stroke"></line>
+          <line x1="0" y1="180" x2="800" y2="180" stroke="#E4E4E0" stroke-width="1" vector-effect="non-scaling-stroke"></line>
+          <path ref="{{ pathRef }}" d="M0,20 C120,20 200,22 290,48 C400,82 470,140 560,162 C640,180 720,180 800,180" fill="none" stroke="#1E9E58" stroke-width="2" vector-effect="non-scaling-stroke" pathLength="1" style="stroke-dasharray:1; stroke-dashoffset:{{ dashOff }}; transition:stroke-dashoffset 2000ms cubic-bezier(0.65,0,0.35,1) 300ms;"></path>
+        </svg>
+        <span aria-hidden="true" style="position:absolute; left:0; top:calc(20 / 200 * 100%); width:10px; height:10px; margin:-5px 0 0 -5px; border-radius:999px; background:#1E9E58;"><span style="position:absolute; inset:0; border-radius:999px; background:#1E9E58; animation:pulse 1.8s cubic-bezier(0.22,1,0.36,1) infinite;"></span></span>
+        <span aria-hidden="true" style="position:absolute; right:0; top:0; font-size:0.8125rem; font-weight:500; color:#5E6168;">100</span>
+        <span aria-hidden="true" style="position:absolute; right:0; bottom:calc(20 / 200 * 100% + 8px); font-size:0.8125rem; font-weight:500; color:#13804A; opacity:{{ endO }}; transition:opacity 600ms 2000ms;">78</span>
+      </div>
+      <div aria-hidden="true" style="display:flex; justify-content:space-between; font-size:0.875rem; font-weight:500; letter-spacing:-0.01em; color:#5E6168;"><span>Abr</span><span>May</span><span>Jun</span><span>Jul</span><span>Ago</span><span>Sep</span></div>
+    </figure>
+  </section>
+
+  <!-- MODALIDADES -->
+  <section id="modalidades" data-card="" data-screen-label="07 Modalidades" style="border-radius:20px; background:#FFFFFF; padding:clamp(72px, 12vh, 120px) clamp(16px, 3vw, 40px); transform-origin:center top;">
+    <div style="display:flex; flex-direction:column; align-items:center; text-align:center; gap:12px;">
+      <div data-line="" style="font-size:0.875rem; font-weight:500; letter-spacing:-0.01em; color:#5E6168;">Modalidades</div>
+      <h2 data-line="" data-delay="60" style="margin:0; font-weight:600; font-stretch:112%; font-size:clamp(2rem, 4vw, 3.25rem); letter-spacing:-0.045em; line-height:1;">Tres formas de contratar.</h2>
+      <p data-line="" data-delay="120" style="margin:0; max-width:42ch; color:#3A3D42;">Precio por unidad atendida, según tipo de vehículo y frecuencia.</p>
+    </div>
+    <div style="margin:clamp(40px, 6vh, 64px) auto 0; max-width:1120px; display:grid; grid-template-columns:repeat(auto-fit, minmax(min(100%, 280px), 1fr)); gap:12px;">
+      <div data-spread="-1" style="display:flex; flex-direction:column; gap:24px; padding:24px; border-radius:16px; background:#F6F6F3;">
+        <div style="font-size:0.875rem; font-weight:500; letter-spacing:-0.01em; color:#5E6168;">01</div>
+        <div style="display:flex; flex-direction:column; gap:8px;"><h3 style="margin:0; font-weight:600; font-stretch:110%; font-size:1.75rem; letter-spacing:-0.04em; line-height:1;">Por evento</h3><p style="margin:0; font-size:0.9375rem; color:#3A3D42;">Lavados puntuales para auditorías, entregas o temporada alta.</p></div>
+        <dl style="margin:0; font-size:0.9375rem;">
+          <div style="display:flex; justify-content:space-between; padding:11px 0; border-top:1px solid #E2E2DE;"><dt style="color:#5E6168;">Mínimo</dt><dd style="margin:0;">5 unidades</dd></div>
+          <div style="display:flex; justify-content:space-between; padding:11px 0; border-top:1px solid #E2E2DE;"><dt style="color:#5E6168;">Agenda</dt><dd style="margin:0;">72 h antes</dd></div>
+          <div style="display:flex; justify-content:space-between; padding:11px 0; border-top:1px solid #E2E2DE;"><dt style="color:#5E6168;">Reporte</dt><dd style="margin:0;">Por evento</dd></div>
+        </dl>
+        <a href="#contacto" data-hov="" style="margin-top:auto; display:flex; align-items:center; justify-content:center; gap:8px; height:46px; border-radius:999px; background:#FFFFFF; color:#111214; font-size:0.9375rem; font-weight:500;" style-hover="background:#ECECE8; color:#111214;">Cotizar <span data-hov-arrow="" style="display:inline-block; transition:transform 500ms cubic-bezier(0.22,1,0.36,1);">→</span></a>
+      </div>
+      <div data-spread="0" style="display:flex; flex-direction:column; gap:24px; padding:24px; border-radius:16px; background:#FFFFFF; box-shadow:0 0 0 1.5px #111214;">
+        <div style="display:flex; justify-content:space-between; align-items:center;"><div style="font-size:0.875rem; font-weight:500; letter-spacing:-0.01em; color:#5E6168;">02</div><div style="font-size:0.875rem; font-weight:500; letter-spacing:-0.01em; padding:5px 10px; border-radius:999px; background:#E8F4EC; color:#13804A;">Más contratado</div></div>
+        <div style="display:flex; flex-direction:column; gap:8px;"><h3 style="margin:0; font-weight:600; font-stretch:110%; font-size:1.75rem; letter-spacing:-0.04em; line-height:1;">Plan mensual</h3><p style="margin:0; font-size:0.9375rem; color:#3A3D42;">Frecuencia fija por unidad, turno asignado y checklist en cada visita.</p></div>
+        <dl style="margin:0; font-size:0.9375rem;">
+          <div style="display:flex; justify-content:space-between; padding:11px 0; border-top:1px solid #E2E2DE;"><dt style="color:#5E6168;">Mínimo</dt><dd style="margin:0;">10 unidades</dd></div>
+          <div style="display:flex; justify-content:space-between; padding:11px 0; border-top:1px solid #E2E2DE;"><dt style="color:#5E6168;">Frecuencia</dt><dd style="margin:0;">Semanal</dd></div>
+          <div style="display:flex; justify-content:space-between; padding:11px 0; border-top:1px solid #E2E2DE;"><dt style="color:#5E6168;">Reporte</dt><dd style="margin:0;">Mensual por placa</dd></div>
+        </dl>
+        <a href="#contacto" data-hov="" style="margin-top:auto; display:flex; align-items:center; justify-content:center; gap:8px; height:46px; border-radius:999px; background:#111214; color:#FFFFFF; font-size:0.9375rem; font-weight:500;" style-hover="background:#2A2C30; color:#FFFFFF;">Cotizar <span data-hov-arrow="" style="display:inline-block; transition:transform 500ms cubic-bezier(0.22,1,0.36,1);">→</span></a>
+      </div>
+      <div data-spread="1" style="display:flex; flex-direction:column; gap:24px; padding:24px; border-radius:16px; background:#F6F6F3;">
+        <div style="font-size:0.875rem; font-weight:500; letter-spacing:-0.01em; color:#5E6168;">03</div>
+        <div style="display:flex; flex-direction:column; gap:8px;"><h3 style="margin:0; font-weight:600; font-stretch:110%; font-size:1.75rem; letter-spacing:-0.04em; line-height:1;">Contrato anual</h3><p style="margin:0; font-size:0.9375rem; color:#3A3D42;">Flotas grandes. Mantenimiento preventivo y cuadrilla dedicada.</p></div>
+        <dl style="margin:0; font-size:0.9375rem;">
+          <div style="display:flex; justify-content:space-between; padding:11px 0; border-top:1px solid #E2E2DE;"><dt style="color:#5E6168;">Mínimo</dt><dd style="margin:0;">50 unidades</dd></div>
+          <div style="display:flex; justify-content:space-between; padding:11px 0; border-top:1px solid #E2E2DE;"><dt style="color:#5E6168;">Cuadrilla</dt><dd style="margin:0;">Dedicada</dd></div>
+          <div style="display:flex; justify-content:space-between; padding:11px 0; border-top:1px solid #E2E2DE;"><dt style="color:#5E6168;">Reporte</dt><dd style="margin:0;">Semanal + panel</dd></div>
+        </dl>
+        <a href="#contacto" data-hov="" style="margin-top:auto; display:flex; align-items:center; justify-content:center; gap:8px; height:46px; border-radius:999px; background:#FFFFFF; color:#111214; font-size:0.9375rem; font-weight:500;" style-hover="background:#ECECE8; color:#111214;">Cotizar <span data-hov-arrow="" style="display:inline-block; transition:transform 500ms cubic-bezier(0.22,1,0.36,1);">→</span></a>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section id="faq" data-card="" data-screen-label="08 FAQ" style="border-radius:20px; background:#FFFFFF; padding:clamp(64px, 10vh, 110px) clamp(20px, 4vw, 56px); transform-origin:center top;">
+    <div style="max-width:1120px; margin:0 auto; display:grid; grid-template-columns:repeat(auto-fit, minmax(min(100%, 340px), 1fr)); gap:clamp(32px, 6vw, 96px); align-items:start;">
+      <div style="display:flex; flex-direction:column; gap:14px;">
+        <h2 data-line="" style="margin:0; font-weight:600; font-stretch:112%; font-size:clamp(2rem, 4vw, 3.25rem); letter-spacing:-0.045em; line-height:1; max-width:10ch;">Preguntas frecuentes.</h2>
+        <p data-line="" data-delay="80" style="margin:0; max-width:32ch; font-size:0.9375rem; color:#3A3D42;">¿No está tu caso? Escríbenos por <a href="https://wa.me/50760000000" style="text-decoration:underline; text-underline-offset:0.18em;">WhatsApp</a>.</p>
+      </div>
+      <div style="display:flex; flex-direction:column;">
+        <sc-for list="{{ faqs }}" as="f" hint-placeholder-count="6">
+          <div style="border-bottom:1px solid #EAEAE6;">
+            <h3 style="margin:0;"><button type="button" aria-expanded="{{ f.exp }}" onClick="{{ f.toggle }}" style="width:100%; min-height:60px; display:flex; align-items:center; gap:14px; padding:14px 0; border:0; background:transparent; color:#111214; text-align:left; cursor:pointer; font-weight:500; font-size:1rem; letter-spacing:-0.01em; line-height:1.35;"><span aria-hidden="true" style="flex:none; display:inline-block; font-size:0.875rem; transform:{{ f.rot }}; transition:transform 500ms cubic-bezier(0.22,1,0.36,1);">›</span><span>{{ f.q }}</span></button></h3>
+            <div style="display:grid; grid-template-rows:{{ f.rows }}; transition:grid-template-rows 550ms cubic-bezier(0.22,1,0.36,1);"><div style="overflow:hidden;"><p style="margin:0; padding:0 24px 18px 26px; font-size:0.9375rem; color:#3A3D42; text-wrap:pretty;">{{ f.a }}</p></div></div>
+          </div>
+        </sc-for>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA + FOOTER (oscuro) -->
+  <section id="contacto" data-screen-label="09 CTA + Footer" style="border-radius:20px; background:#111214; color:#FFFFFF; overflow:hidden;">
+    <div style="padding:clamp(88px, 14vh, 150px) clamp(20px, 4vw, 48px) clamp(64px, 10vh, 100px); display:flex; flex-direction:column; align-items:center; text-align:center; gap:18px;">
+      <div data-line="" style="font-size:0.875rem; font-weight:500; letter-spacing:-0.01em; color:#A9ADB4;">Respuesta en 24 h hábiles</div>
+      <h2 data-line="" data-delay="60" style="margin: 0; font-weight: 600; font-stretch: 112%; font-size: clamp(2.25rem, 5.5vw, 4.75rem); letter-spacing: -0.045em; line-height: 0.98; max-width: 20ch; text-wrap: balance">Agenda el diagnóstico de tu flota.</h2>
+      <p data-line="" data-delay="120" style="margin:0; max-width:42ch; color:#C9CCD1;">Envíanos cantidad de unidades, tipos y ubicación del patio. Devolvemos una propuesta por tipo de vehículo.</p>
+      <div data-line="" data-delay="180" style="margin-top:8px; display:flex; gap:8px; flex-wrap:wrap; justify-content:center;">
+        <a href="mailto:flotas@pitlane.com.pa" data-hov="" style="display:inline-flex; align-items:center; gap:8px; height:48px; padding:0 24px; border-radius:999px; background:#FFFFFF; color:#111214; font-weight:500;" style-hover="background:#E6E6E2; color:#111214;">Cotizar flota <span data-hov-arrow="" style="display:inline-block; transition:transform 500ms cubic-bezier(0.22,1,0.36,1);">→</span></a>
+        <a href="https://wa.me/50760000000" style="display:inline-flex; align-items:center; height:48px; padding:0 24px; border-radius:999px; background:#24262B; color:#FFFFFF; font-weight:500;" style-hover="background:#33363C; color:#FFFFFF;">WhatsApp</a>
+      </div>
+    </div>
+    <footer style="padding:0 clamp(20px, 4vw, 48px) 24px;">
+      <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(min(100%, 180px), 1fr)); gap:24px; padding:28px 0; border-top:1px solid #2C2E33; font-size:0.9375rem;">
+        <div style="display:flex; flex-direction:column; gap:6px;"><div style="font-size:0.875rem; font-weight:500; letter-spacing:-0.01em; color:#A9ADB4;">Contacto</div><a href="mailto:flotas@pitlane.com.pa">flotas@empresa.com.pa</a><a href="tel:+5073000000">+507 300-0000</a></div>
+        <div style="display:flex; flex-direction:column; gap:6px;"><div style="font-size:0.875rem; font-weight:500; letter-spacing:-0.01em; color:#A9ADB4;">Navegación</div><a href="#servicios">Servicios</a><a href="#proceso">Proceso</a><a href="#modalidades">Modalidades</a></div>
+        <div style="display:flex; flex-direction:column; gap:6px;"><div style="font-size:0.875rem; font-weight:500; letter-spacing:-0.01em; color:#A9ADB4;">Base</div><span>Juan Díaz, Ciudad de Panamá</span></div>
+      </div>
+      <div style="display:flex; justify-content:space-between; flex-wrap:wrap; gap:12px; padding-top:18px; border-top:1px solid #2C2E33; font-size:0.875rem; font-weight:500; letter-spacing:-0.01em; color:#A9ADB4;"><span>© 2026 [EMPRESA] Fleet Care</span><span>Lavado y mantenimiento de flotas — Panamá</span></div>
+    </footer>
+  </section>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;smoothScroll&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Movimiento&quot;},&quot;marqueeSpeed&quot;:{&quot;editor&quot;:&quot;range&quot;,&quot;default&quot;:0.5,&quot;min&quot;:0.2,&quot;max&quot;:2,&quot;step&quot;:0.1,&quot;unit&quot;:&quot;px/frame&quot;,&quot;tsType&quot;:&quot;number&quot;,&quot;section&quot;:&quot;Movimiento&quot;},&quot;heroVideoSrc&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Hero&quot;}}">
+const FAQS = [
+  ['¿Necesitan agua o electricidad de nuestra instalación?', 'No. Cada cuadrilla lleva tanque de agua tratada, generador e hidrolavadora propios. Solo necesitamos acceso al patio.'],
+  ['¿Cuál es el mínimo de unidades?', 'Diez para el plan mensual y cinco para servicios por evento. El contrato anual aplica desde cincuenta.'],
+  ['¿Trabajan de noche o en fines de semana?', 'Sí. La mayoría de los turnos corre entre 20:00 y 05:00. Sábados y domingos sin recargo en plan mensual.'],
+  ['¿Qué revisa el checklist mecánico?', 'Fluidos, presión de llantas, luces, plumillas y fugas visibles. No sustituye el mantenimiento de taller.'],
+  ['¿Cómo se factura?', 'Factura electrónica mensual por unidad atendida, con detalle por placa y centro de costo.'],
+  ['¿Atienden fuera de Ciudad de Panamá?', 'Panamá Oeste y Colón con programación semanal. Otras provincias, por cotización.'],
+];
+
+class Component extends DCLogic {
+  state = { w: typeof window !== 'undefined' ? window.innerWidth : 1440, pastHero: false, menuOpen: false, step: 0, faq: 0, ph: -1, chartIn: false };
+  videoRef = React.createRef(); marqueeRef = React.createRef(); trackRef = React.createRef(); progRef = React.createRef();
+  edRef = React.createRef(); heroMediaRef = React.createRef(); chartRef = React.createRef(); pathRef = React.createRef();
+
+  componentDidMount() {
+    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    this.reduced = reduced;
+    const clamp = (v, a = 0, b = 1) => Math.min(b, Math.max(a, v));
+    const E = 'cubic-bezier(0.22, 1, 0.36, 1)';
+    this.cleanups = [];
+    const on = (t, ev, fn, o) => { t.addEventListener(ev, fn, o); this.cleanups.push(() => t.removeEventListener(ev, fn, o)); };
+    on(window, 'resize', () => this.setState({ w: window.innerWidth }));
+    const IO = 'IntersectionObserver' in window;
+    const observe = (els, fn, opts) => { if (!IO) return els.forEach(fn); const io = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) { io.unobserve(e.target); fn(e.target); } }), opts); els.forEach(el => io.observe(el)); this.cleanups.push(() => io.disconnect()); };
+
+    // Line reveals: rise + unblur (video's headline/paragraph entrance)
+    const lines = [...document.querySelectorAll('[data-line]')];
+    if (!reduced) {
+      lines.forEach(el => { el.style.opacity = '0'; el.style.transform = 'translateY(18px)'; el.style.filter = 'blur(6px)'; el.style.transition = `opacity 900ms ${E}, transform 1000ms ${E}, filter 900ms ${E}`; });
+      observe(lines, el => setTimeout(() => { el.style.opacity = ''; el.style.transform = ''; el.style.filter = ''; }, Number(el.dataset.delay) || 0), { threshold: 0.15, rootMargin: '0px 0px -5% 0px' });
+    }
+
+    // Spread: cards gather at centre then fan out to their slots
+    const groups = new Map();
+    document.querySelectorAll('[data-spread]').forEach(el => { const p = el.parentElement; if (!groups.has(p)) groups.set(p, []); groups.get(p).push(el); });
+    if (!reduced) groups.forEach((cards, parent) => {
+      const stacked = () => getComputedStyle(parent).gridTemplateColumns.split(' ').length < 2;
+      cards.forEach(c => { const s = Number(c.dataset.spread); c.style.transition = `transform 1100ms ${E}, opacity 700ms ${E}`; if (!stacked()) { c.style.transform = `translateX(${-s * 100}%) scale(0.88)`; c.style.opacity = s === 0 ? '1' : '0'; c.style.zIndex = s === 0 ? '2' : '1'; } else { c.style.transform = 'translateY(24px)'; c.style.opacity = '0'; } c.style.position = 'relative'; });
+      observe([parent], () => cards.forEach((c, i) => setTimeout(() => { c.style.transform = ''; c.style.opacity = ''; }, Number(c.dataset.spread) === 0 ? 0 : 160 + i * 40)), { threshold: 0.3 });
+    });
+
+    // Count-up
+    const counters = [...document.querySelectorAll('[data-count]')];
+    if (!reduced) {
+      counters.forEach(c => { if (c.firstChild) c.firstChild.nodeValue = '0'; });
+      observe(counters, el => { const target = +el.dataset.count, t0 = performance.now(); const tick = t => { const p = clamp((t - t0) / 1600); if (el.firstChild) el.firstChild.nodeValue = String(Math.round(target * (1 - Math.pow(1 - p, 4)))); if (p < 1) requestAnimationFrame(tick); }; setTimeout(() => requestAnimationFrame(tick), 250); }, { threshold: 0.5 });
+    }
+
+    // Chart
+    if (this.chartRef.current) observe([this.chartRef.current], () => this.setState({ chartIn: true }), { threshold: 0.45 });
+
+    // Hover delegation
+    const setHov = (el, v) => {
+      el.querySelectorAll('[data-hov-arrow]').forEach(a => a.style.transform = v ? 'translateX(4px)' : '');
+      el.querySelectorAll('[data-hov-img]').forEach(a => a.style.transform = v ? 'scale(1.04)' : '');
+    };
+    if (!reduced) on(document, 'pointerover', e => {
+      if (e.pointerType === 'touch') return;
+      const el = e.target.closest && e.target.closest('[data-hov]');
+      if (el === this.hovEl) return;
+      if (this.hovEl) setHov(this.hovEl, false);
+      this.hovEl = el; if (el) setHov(el, true);
+    });
+    on(document, 'pointerdown', e => { if (this.state.ph >= 0 && !(e.target.closest && e.target.closest('[role="button"]'))) this.setState({ ph: -1 }); });
+
+    // Scroll-linked
+    const cards = [...document.querySelectorAll('[data-card]')];
+    const eds = [...document.querySelectorAll('[data-ed]')];
+    const steps = [...document.querySelectorAll('[data-step]')];
+    const onScroll = () => {
+      const y = window.scrollY, vh = window.innerHeight;
+      const past = y > vh * 0.7; if (past !== this.state.pastHero) this.setState({ pastHero: past });
+      if (!reduced) {
+        const hm = this.heroMediaRef.current;
+        if (hm && y < vh * 1.2) hm.style.transform = `translate3d(0, ${(y * 0.12).toFixed(1)}px, 0) scale(${(1 + 0.08 * clamp(y / vh)).toFixed(4)})`;
+        cards.forEach(c => {
+          const r = c.getBoundingClientRect();
+          if (r.top > vh + 40 || r.bottom < 0) return;
+          const p = clamp((vh - r.top) / (vh * 0.6));
+          c.style.transform = `scale(${(0.94 + 0.06 * p).toFixed(4)})`;
+        });
+        if (this.edRef.current) {
+          const r = this.edRef.current.getBoundingClientRect();
+          const p = clamp((vh * 0.85 - r.top) / (vh * 0.55));
+          const n = eds.length;
+          eds.forEach((s, i) => { s.style.opacity = String(0.14 + 0.86 * clamp(p * (n + 1) - i)); });
+        }
+      }
+      let act = 0; steps.forEach((s, i) => { if (s.getBoundingClientRect().top < vh * 0.6) act = i; });
+      if (act !== this.state.step) this.setState({ step: act });
+      if (!this.anim) this.cur = this.target = y;
+    };
+    on(window, 'scroll', onScroll, { passive: true });
+    onScroll();
+
+    // Hero entrance: media settles from 1.08
+    const hm = this.heroMediaRef.current;
+    if (hm && !reduced) { const img = hm.firstChild; img.style.transform = 'scale(1.08)'; img.style.transition = `transform 2200ms ${E}`; requestAnimationFrame(() => requestAnimationFrame(() => { img.style.transform = ''; })); }
+
+    // Marquee
+    if (!reduced && this.marqueeRef.current) {
+      let x = 0, last = performance.now(); const m = this.marqueeRef.current;
+      const loop = t => { const dt = Math.min(64, t - last); last = t; const half = m.scrollWidth / 2; x -= (this.props.marqueeSpeed ?? 0.5) * dt / 16.67; if (half && -x >= half) x += half; m.style.transform = `translate3d(${x.toFixed(2)}px,0,0)`; this.mq = requestAnimationFrame(loop); };
+      this.mq = requestAnimationFrame(loop);
+    }
+
+    // Hero video ping-pong
+    const v = this.videoRef.current, src = this.props.heroVideoSrc ?? '';
+    if (v && src && !reduced) {
+      v.loop = false; v.muted = true; v.src = src;
+      on(v, 'playing', () => { v.style.opacity = '1'; });
+      on(v, 'ended', () => { v.pause(); let lt = performance.now(); const back = t => { const nt = v.currentTime - (t - lt) / 1000; lt = t; if (nt <= 0.04) { v.currentTime = 0; v.play().catch(() => {}); return; } v.currentTime = nt; this.rev = requestAnimationFrame(back); }; this.rev = requestAnimationFrame(back); });
+      v.play().catch(() => {});
+    }
+
+    // Smooth wheel scroll
+    const smooth = (this.props.smoothScroll ?? true) && !reduced && !window.matchMedia('(pointer: coarse)').matches;
+    this.cur = this.target = window.scrollY;
+    const maxY = () => document.documentElement.scrollHeight - window.innerHeight;
+    const run = () => { this.anim = true; this.cur += (this.target - this.cur) * 0.1; if (Math.abs(this.target - this.cur) < 0.5) { this.cur = this.target; window.scrollTo(0, this.cur); this.anim = false; return; } window.scrollTo(0, this.cur); this.raf = requestAnimationFrame(run); };
+    this.scrollToY = y => { if (smooth) { this.target = clamp(y, 0, maxY()); if (!this.anim) { this.cur = window.scrollY; run(); } } else window.scrollTo({ top: y, behavior: reduced ? 'auto' : 'smooth' }); };
+    if (smooth) on(window, 'wheel', e => { if (e.ctrlKey || this.state.menuOpen || Math.abs(e.deltaX) > Math.abs(e.deltaY)) return; e.preventDefault(); const d = e.deltaMode === 1 ? e.deltaY * 16 : e.deltaMode === 2 ? e.deltaY * window.innerHeight : e.deltaY; this.target = clamp((this.anim ? this.target : window.scrollY) + d, 0, maxY()); if (!this.anim) { this.cur = window.scrollY; run(); } }, { passive: false });
+    on(document, 'click', e => {
+      const a = e.target.closest && e.target.closest('a[href^="#"]'); if (!a) return;
+      const id = a.getAttribute('href'); const el = id === '#top' ? document.body : document.querySelector(id); if (!el) return;
+      e.preventDefault(); if (this.state.menuOpen) this.setState({ menuOpen: false });
+      this.scrollToY(id === '#top' ? 0 : el.getBoundingClientRect().top + window.scrollY - 10);
+    });
+
+    // Carousel
+    const tr = this.trackRef.current;
+    if (tr) {
+      const prog = () => { const p = tr.scrollWidth > tr.clientWidth ? (tr.scrollLeft + tr.clientWidth) / tr.scrollWidth : 1; if (this.progRef.current) this.progRef.current.style.transform = `scaleX(${p.toFixed(4)})`; };
+      on(tr, 'scroll', prog, { passive: true }); prog();
+      let drag = null;
+      on(tr, 'pointerdown', e => { if (e.pointerType !== 'mouse' || e.button !== 0) return; drag = { x: e.clientX, s: tr.scrollLeft, moved: false }; tr.style.scrollSnapType = 'none'; tr.style.cursor = 'grabbing'; });
+      on(window, 'pointermove', e => { if (!drag) return; const dx = e.clientX - drag.x; if (Math.abs(dx) > 4) drag.moved = true; tr.scrollLeft = drag.s - dx; });
+      on(window, 'pointerup', () => {
+        if (!drag) return; const moved = drag.moved; drag = null; tr.style.cursor = 'grab';
+        const cs = [...tr.children]; const pl = parseFloat(getComputedStyle(tr).paddingLeft) || 0;
+        let best = 0, bd = Infinity; cs.forEach((c, i) => { const d = Math.abs(c.offsetLeft - pl - tr.scrollLeft); if (d < bd) { bd = d; best = i; } });
+        tr.scrollTo({ left: cs[best].offsetLeft - pl, behavior: reduced ? 'auto' : 'smooth' });
+        setTimeout(() => { tr.style.scrollSnapType = 'x mandatory'; }, 700);
+        if (moved) { const stop = ev => { ev.preventDefault(); ev.stopPropagation(); }; tr.addEventListener('click', stop, { capture: true, once: true }); setTimeout(() => tr.removeEventListener('click', stop, { capture: true }), 50); }
+      });
+    }
+  }
+
+  componentWillUnmount() { (this.cleanups || []).forEach(f => f()); cancelAnimationFrame(this.mq); cancelAnimationFrame(this.raf); cancelAnimationFrame(this.rev); }
+
+  slide(dir) { const tr = this.trackRef.current; if (!tr || !tr.children[0]) return; tr.scrollBy({ left: dir * (tr.children[0].getBoundingClientRect().width + 12), behavior: this.reduced ? 'auto' : 'smooth' }); }
+
+  renderVals() {
+    const { w, pastHero, menuOpen, step, faq, ph, chartIn } = this.state;
+    const mobile = w < 760, narrow = w < 900;
+    const vals = {
+      videoRef: this.videoRef, marqueeRef: this.marqueeRef, trackRef: this.trackRef, progRef: this.progRef, edRef: this.edRef, heroMediaRef: this.heroMediaRef, chartRef: this.chartRef, pathRef: this.pathRef,
+      floatY: pastHero ? '0px' : '-90px', floatO: pastHero ? 1 : 0, floatPE: pastHero ? 'auto' : 'none',
+      navLinksDisplay: mobile ? 'none' : 'flex', navCtaDisplay: mobile ? 'none' : 'inline-flex', burgerDisplay: mobile ? 'flex' : 'none',
+      hasVideo: !!(this.props.heroVideoSrc), menuOpen, menuExpanded: menuOpen ? 'true' : 'false',
+      openMenu: () => this.setState({ menuOpen: true }), closeMenu: () => this.setState({ menuOpen: false }),
+      h1Size: mobile ? 'clamp(2.5rem, 11vw, 3.5rem)' : 'clamp(3.25rem, 6.4vw, 6.25rem)',
+      heroImgH: mobile ? '52%' : '62%', heroPos: mobile ? '42% 75%' : 'center 72%', heroDataDisplay: mobile ? 'none' : 'inline',
+      prevCard: () => this.slide(-1), nextCard: () => this.slide(1),
+      procCols: narrow ? '1fr' : 'minmax(0, 5fr) minmax(0, 7fr)', procSticky: narrow ? 'static' : 'sticky', stepMinH: narrow ? 'auto' : '38vh',
+      phOff: () => this.setState({ ph: -1 }),
+      dashOff: chartIn || this.reduced ? 0 : 1, endO: chartIn || this.reduced ? 1 : 0,
+      hlBg: chartIn ? '#111214' : 'transparent', hlInk: chartIn ? '#FFFFFF' : '#111214',
+      faqs: FAQS.map(([q, a], i) => ({ q, a, exp: faq === i ? 'true' : 'false', rows: faq === i ? '1fr' : '0fr', rot: faq === i ? 'rotate(90deg)' : 'rotate(0deg)', toggle: () => this.setState(s => ({ faq: s.faq === i ? -1 : i })) })),
+    };
+    for (let i = 0; i < 4; i++) {
+      vals['stepBg' + i] = i === step ? '#1D1F23' : 'transparent';
+      vals['stepO' + i] = narrow || i === step ? 1 : 0.45;
+      vals['dot' + i] = i <= step ? '#1E9E58' : '#34373D';
+    }
+    for (let i = 0; i < 5; i++) {
+      const a = ph === i;
+      vals['ph' + i + 'on'] = () => this.setState({ ph: i });
+      vals['phBg' + i] = a ? '#111214' : 'transparent';
+      vals['phInk' + i] = a ? '#FFFFFF' : 'inherit';
+      vals['phO' + i] = a ? 1 : 0;
+      vals['phT' + i] = a ? 'translateY(0) scale(1)' : 'translateY(-6px) scale(0.96)';
+      vals['phHid' + i] = a ? 'false' : 'true';
+    }
+    return vals;
+  }
+}
+</script>
+</body>
+</html>
